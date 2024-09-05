@@ -2,6 +2,7 @@ import { useState } from 'react';
 import avatar from "../assets/avatar.png";
 import logo from "../assets/logo.png";
 import { Link } from 'react-router-dom';
+import { IoBagOutline } from "react-icons/io5";
 
 const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -17,38 +18,41 @@ const Navbar = () => {
     setDropdownOpen(false); // Close dropdown when menu opens
   };
 
-  const user = false;
+  const closeMenu = () => {
+    setMenuOpen(false); // Close the mobile menu on link click
+    setDropdownOpen(false); // Close the dropdown on link click
+  };
+
+  const user = true;
 
   return (
     <div>
       <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src={logo} className="h-8" alt="Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap text-gray-900 dark:text-white">
-              FurniFlex
-            </span>
-          </a>
+          </Link>
 
           <div className="flex items-center md:order-2 space-x-3 rtl:space-x-reverse">
             {user ? (
-              <button
-                type="button"
-                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                onClick={toggleDropdown}
-                aria-expanded={isDropdownOpen}
-                aria-controls="user-dropdown"
-              >
-                <span className="sr-only">Open user menu</span>
-                <img
-                  className="w-8 h-8 rounded-full"
-                  src={avatar}
-                  alt="User"
-                />
-              </button>
+              <>
+                <button>
+                  <IoBagOutline size={24} />
+                </button>
+                <button
+                  type="button"
+                  className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  onClick={toggleDropdown}
+                  aria-expanded={isDropdownOpen}
+                  aria-controls="user-dropdown"
+                >
+                  <span className="sr-only">Open user menu</span>
+                  <img className="w-8 h-8 rounded-full" src={avatar} alt="User" />
+                </button>
+              </>
             ) : (
               <Link
-                to={"/signIn"}
+                to="/signIn"
                 className="px-5 py-2.5 font-medium bg-blue-50 hover:bg-blue-100 hover:text-blue-600 text-blue-500 rounded-lg text-sm"
               >
                 Login
@@ -69,12 +73,13 @@ const Navbar = () => {
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="/signOut"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      onClick={closeMenu}
                     >
                       Sign out
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -117,44 +122,49 @@ const Navbar = () => {
           >
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/home"
+                  onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/products"
+                  onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Products
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/categories"
+                  onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Categories
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/custom"
+                  onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Custom
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/blog"
+                  onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
                   Blog
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
