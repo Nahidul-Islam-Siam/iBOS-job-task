@@ -23,7 +23,7 @@ const Navbar = () => {
     setDropdownOpen(false); // Close the dropdown on link click
   };
 
-  const user = true;
+  const user = false;
 
   return (
     <div>
