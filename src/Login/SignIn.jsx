@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import bgImg from "../assets/bgChair.png";
 import SocialLogin from "./SocialLogin";
 
+
 const SignUp = () => {
   return (
     <div className="w-full min-h-screen">
@@ -10,14 +11,14 @@ const SignUp = () => {
 
           {/* Left section: Signup Form */}
           <div className="md:w-full w-full p-28 bg-white border rounded-md">
-            <h3 className="text-gray-800 text-3xl font-extrabold">
-            <span>  Welcome To</span>
+            <h3 className="text-gray-800 text-3xl font-extrabold ">
+            <span> Welcome To</span>
             </h3>
             <p className="text-sm  text-gray-600">
             Enter your Credentials to access your account
             </p>
 
-            <form className="mt-6">
+            <form className="mt-2">
               <div className="grid grid-cols-2 gap-4">
                 {/* <div>
                   <label
@@ -78,7 +79,7 @@ const SignUp = () => {
                   type="password"
                   id="password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   required
                 />
               </div>
@@ -100,7 +101,7 @@ const SignUp = () => {
               >
                 Sign Up
               </button>
-
+<h3 className="text-center mt-1">or</h3>
               {/* <div className="flex items-center justify-center mt-6 space-x-4">
                 <button className="flex items-center justify-center border px-4 py-2 rounded-md">
                   <svg

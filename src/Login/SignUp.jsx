@@ -1,5 +1,6 @@
 import SocialLogin from "./SocialLogin";
 import bgImg from "../assets/bgChair.png";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
     return (
@@ -10,13 +11,15 @@ const SignUp = () => {
 
           {/* Left section: Signup Form */}
           <div className="md:w-full w-full p-24 bg-white border rounded-md">
-            <h3 className="text-gray-800 text-3xl font-extrabold">
-              Welcome To <br /><span className="text-blue-600">FurniFlex</span>
+            <div className="text-center">
+            <h3 className="text-gray-700 text-xl font-extrabold">
+              Welcome To <br /><span className="text-4xl text-gray-800">Furni<span className="text-blue-600">Flex</span></span>
             </h3>
             <p className="text-sm mt-4 text-gray-600">
               Signup for purchase your desired products
             </p>
 
+            </div>
             <form className="mt-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -24,7 +27,7 @@ const SignUp = () => {
                     htmlFor="firstName"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    First Name
+                   First name (optional)
                   </label>
                   <input
                     type="text"
@@ -39,7 +42,7 @@ const SignUp = () => {
                     htmlFor="lastName"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Last Name
+Last name (optional)
                   </label>
                   <input
                     type="text"
@@ -100,6 +103,7 @@ const SignUp = () => {
               >
                 Sign Up
               </button>
+              <h3 className="text-center mt-1">or</h3>
 
               {/* <div className="flex items-center justify-center mt-6 space-x-4">
                 <button className="flex items-center justify-center border px-4 py-2 rounded-md">
@@ -128,7 +132,7 @@ const SignUp = () => {
               <SocialLogin/>
 
               <p className="mt-6 text-sm text-center text-gray-600">
-                Already have an account? <a href="#" className="text-blue-600 font-semibold hover:underline">Sign In</a>
+              Have an account? <Link to={"/signIn"}  className="text-blue-600 font-semibold hover:underline"> Sign In</Link>
               </p>
             </form>
           </div>
