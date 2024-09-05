@@ -8,10 +8,14 @@ import { useForm } from "react-hook-form";
 const SignUp = () => {
   const { createUser } = useContext(AuthContex);
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit,  formState: { errors } } = useForm();
   const onSubmit = (data) => {
    const {email,password} = data
    createUser(email,password)
+   .then(result=>{
+    console.log(result);
+    
+   })
   };
 
   return (
@@ -77,7 +81,12 @@ const SignUp = () => {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full"
                   placeholder="name@company.com"
-                  {...register("email", { required: true })}
+                  {...register("email", { required: true,
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: "Invalid email address",
+                    },
+                   })}
                 />
                 {errors.email && (
                   <p className="text-red-600 text-sm">Email is required</p>
@@ -96,7 +105,14 @@ const SignUp = () => {
                   id="password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full"
                   placeholder="••••••••"
-                  {...register("password", { required: true })}
+                  {...register("password", 
+                    
+                    { required: true ,
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
+                    })}
                 />
                 {errors.password && (
                   <p className="text-red-600 text-sm">Password is required</p>
