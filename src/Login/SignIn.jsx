@@ -1,17 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import bgImg from "../assets/bgChair.png";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
-import { useContext, useState } from "react";
-import { AuthContex } from "../FirebaseProvider.jsx/FirebaseProvider";
+import useAuth from "../Hooks/useAuth";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
-  const { signInUser } = useContext(AuthContex);
+  const { signInUser } = useAuth();
   
   const { register, handleSubmit, formState: { errors } } = useForm();
-
+  const navigate = useNavigate(); // Import useNavigate for redirection
+  const location=useLocation()
+  const from = location?.state || "/"
   // State for toggling password visibility
   const [showPassword, setShowPassword] = useState(false);
+
+  
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -21,7 +27,9 @@ const SignIn = () => {
     const { email, password } = data;
     signInUser(email, password)
       .then(result => {
-        console.log(result.user);
+        if(result.user){
+          navigate(from)
+        }
       })
       .catch(error => {
         console.log(error.message);
@@ -124,18 +132,18 @@ const SignIn = () => {
               >
                 Sign In
               </button>
-
+              </form>
               <h3 className="text-center mt-1">or</h3>
 
               <SocialLogin />
 
               <p className="mt-6 text-sm text-center text-gray-600">
-                Don't have an account?{" "}
+                Don&#39;t have an account?{" "}
                 <Link to="/signUp" className="text-blue-600 font-semibold hover:underline">
                   Sign Up
                 </Link>
               </p>
-            </form>
+          
           </div>
 
           {/* Right section: Product Image */}

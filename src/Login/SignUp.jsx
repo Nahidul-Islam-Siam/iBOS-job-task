@@ -1,16 +1,21 @@
 import SocialLogin from "./SocialLogin";
 import bgImg from "../assets/bgChair.png";
-import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
-import { AuthContex } from "../FirebaseProvider.jsx/FirebaseProvider";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
 import { useForm } from "react-hook-form";
+import useAuth from "../Hooks/useAuth";
+import { useState } from "react";
 
 const SignUp = () => {
-  const { createUser } = useContext(AuthContex);
+  const { createUser } = useAuth()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   // State for toggling password visibility
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate(); // Import useNavigate for redirection
+  const location=useLocation()
+  const from = location?.state || "/"
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -20,7 +25,9 @@ const SignUp = () => {
     const { email, password } = data;
     createUser(email, password)
       .then((result) => {
-        console.log(result);
+        if(result.user){
+          navigate(from)
+        }
       });
   };
 
@@ -160,6 +167,7 @@ const SignUp = () => {
               >
                 Sign Up
               </button>
+              </form>
 
               <h3 className="text-center mt-1">or</h3>
 
@@ -174,7 +182,7 @@ const SignUp = () => {
                   Sign In
                 </Link>
               </p>
-            </form>
+          
           </div>
 
           {/* Right section: Product Image */}

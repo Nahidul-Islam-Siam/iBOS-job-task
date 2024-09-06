@@ -3,27 +3,29 @@ import avatar from "../assets/avatar.png";
 import logo from "../assets/logo.png";
 import { Link } from 'react-router-dom';
 import { IoBagOutline } from "react-icons/io5";
+import useAuth from '../Hooks/useAuth';
 
 const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
+  const { user, logOut } = useAuth(); 
+  console.log(user);
+
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
-    setMenuOpen(false); // Close menu when dropdown opens
+    setMenuOpen(false);
   };
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
-    setDropdownOpen(false); // Close dropdown when menu opens
+    setDropdownOpen(false);
   };
 
   const closeMenu = () => {
-    setMenuOpen(false); // Close the mobile menu on link click
-    setDropdownOpen(false); // Close the dropdown on link click
+    setMenuOpen(false);
+    setDropdownOpen(false);
   };
-
-  const user = false;
 
   return (
     <div>
@@ -60,26 +62,30 @@ const Navbar = () => {
             )}
 
             {/* Dropdown */}
-            {isDropdownOpen && (
+            {isDropdownOpen && user && (
               <div
                 className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600 absolute right-4 top-12"
                 id="user-dropdown"
               >
                 <div className="px-4 py-3">
-                  <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
+                  <span className="block text-sm text-gray-900 dark:text-white">
+                    {user.displayName}
+                  </span>
                   <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                    name@flowbite.com
+                    {user.email}
                   </span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
-                    <Link
-                      to="/signOut"
+                    <button
+                      onClick={() => {
+                        logOut();
+                        closeMenu();
+                      }}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      onClick={closeMenu}
                     >
                       Sign out
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>
