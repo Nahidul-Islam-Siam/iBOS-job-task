@@ -1,21 +1,27 @@
 import SocialLogin from "./SocialLogin";
 import bgImg from "../assets/bgChair.png";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContex } from "../FirebaseProvider.jsx/FirebaseProvider";
 import { useForm } from "react-hook-form";
 
 const SignUp = () => {
   const { createUser } = useContext(AuthContex);
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const { register, handleSubmit,  formState: { errors } } = useForm();
+  // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const onSubmit = (data) => {
-   const {email,password} = data
-   createUser(email,password)
-   .then(result=>{
-    console.log(result);
-    
-   })
+    const { email, password } = data;
+    createUser(email, password)
+      .then((result) => {
+        console.log(result);
+      });
   };
 
   return (
@@ -35,6 +41,7 @@ const SignUp = () => {
                 Signup for purchase your desired products
               </p>
             </div>
+
             <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -81,19 +88,20 @@ const SignUp = () => {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full"
                   placeholder="name@company.com"
-                  {...register("email", { required: true,
+                  {...register("email", {
+                    required: true,
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                       message: "Invalid email address",
                     },
-                   })}
+                  })}
                 />
                 {errors.email && (
                   <p className="text-red-600 text-sm">Email is required</p>
                 )}
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 relative">
                 <label
                   htmlFor="password"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -101,22 +109,29 @@ const SignUp = () => {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full"
                   placeholder="••••••••"
-                  {...register("password", 
-                    
-                    { required: true ,
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters",
-                      },
-                    })}
+                  {...register("password", {
+                    required: true,
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
                 />
                 {errors.password && (
                   <p className="text-red-600 text-sm">Password is required</p>
                 )}
+                {/* Button to toggle password visibility */}
+                <button
+                  type="button"
+                  className="absolute right-2 top-10 text-sm text-gray-600"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
 
               <div className="flex items-center mt-4">
@@ -133,7 +148,9 @@ const SignUp = () => {
                   </a>
                 </label>
                 {errors.terms && (
-                  <p className="text-red-600 text-sm">You must agree to the terms</p>
+                  <p className="text-red-600 text-sm">
+                    You must agree to the terms
+                  </p>
                 )}
               </div>
 
@@ -171,8 +188,9 @@ const SignUp = () => {
                 Furni<span className="text-blue-500">Flex</span>
               </h3>
               <p className="mt-4 text-lg">
-                Discover a seamless shopping experience with our curated collection
-                of products. From fashion to electronics, we bring quality.
+                Discover a seamless shopping experience with our curated
+                collection of products. From fashion to electronics, we bring
+                quality.
               </p>
             </div>
           </div>

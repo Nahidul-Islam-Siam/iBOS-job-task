@@ -2,29 +2,30 @@ import { Link } from "react-router-dom";
 import bgImg from "../assets/bgChair.png";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContex } from "../FirebaseProvider.jsx/FirebaseProvider";
 
 const SignIn = () => {
-const {signInUser}=useContext(AuthContex)
+  const { signInUser } = useContext(AuthContex);
+  
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const onSubmit = (data) => {
-    console.log(data);
-    signInUser(email,password)
-    .then(result=>{
-      console.log(result.user);
-      
-    })
-    .catch(error=>{
-      console.log(error.message);
-      
-    })
+    const { email, password } = data;
+    signInUser(email, password)
+      .then(result => {
+        console.log(result.user);
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -58,7 +59,6 @@ const {signInUser}=useContext(AuthContex)
                   placeholder="Enter your email"
                   {...register("email", {
                     required: "Email is required",
-                   
                   })}
                 />
                 {errors.email && (
@@ -68,7 +68,7 @@ const {signInUser}=useContext(AuthContex)
                 )}
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 relative">
                 <label
                   htmlFor="password"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -76,7 +76,7 @@ const {signInUser}=useContext(AuthContex)
                   Password
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   className={`bg-gray-50 border ${
                     errors.password ? "border-red-500" : "border-gray-300"
@@ -84,7 +84,6 @@ const {signInUser}=useContext(AuthContex)
                   placeholder="Enter your password"
                   {...register("password", {
                     required: "Password is required",
-                   
                   })}
                 />
                 {errors.password && (
@@ -92,6 +91,14 @@ const {signInUser}=useContext(AuthContex)
                     {errors.password.message}
                   </p>
                 )}
+                {/* Button to toggle password visibility */}
+                <button
+                  type="button"
+                  className="absolute right-2 top-10 text-sm text-gray-600"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
 
               <div className="flex items-center mt-4">
