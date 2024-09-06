@@ -3,76 +3,78 @@ import { createUserWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider,
 import { createContext, useEffect, useState } from "react";
 import auth from "../Firebase/Firebase.config";
 
-export const AuthContex = createContext(null)
-
+export const AuthContex = createContext(null);
 
 const GoogleProvider = new GoogleAuthProvider();
 const GithubProvider = new GithubAuthProvider();
 
+ const FirebaseProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // Create user
+  const createUser = (email, password) => {
+    setLoading(true);
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
-const FirebaseProvider = ({children}) => {
+  // Sign in user
+  const signInUser = (email, password) => {
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
-const [user,setUser] = useState(null)
-const [loading,setLoading]= useState(true)
-console.log(user);
+  // Google login
+  const googleLogin = () => {
+    setLoading(true);
+    return signInWithPopup(auth, GoogleProvider);
+  };
 
-    // create user
-    const createUser =(email, password)=>{
-        setLoading(true)
-      return  createUserWithEmailAndPassword(auth, email, password)
-    }
+  // Github login
+  const githubLogin = () => {
+    setLoading(true);
+    return signInWithPopup(auth, GithubProvider);
+  };
 
-    // sign in user 
-    const signInUser =( email, password)=>{
-        setLoading(true)
-      return  signInWithEmailAndPassword(auth, email, password)
-    }
+  // Sign out
+  const logOut = () => {
+    setLoading(true); // Set loading true to show spinner while logging out
+    return signOut(auth).finally(() => setLoading(false));
+  };
 
-    // goole login
-    const googleLogin = () =>{
-        setLoading(true)
-      return  signInWithPopup(auth, GoogleProvider)
-    }
+  // Observer
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+      setLoading(false); // Set loading to false once auth state is resolved
+    });
 
-    // github login
-    const githubLogin = ()=>{
-        setLoading(true)
-        return signInWithPopup(auth, GithubProvider)
-    }
+    return () => unsubscribe();
+  }, []);
 
-    // sighnOut
-    const logOut = ()=>{
-        setUser(null)
-     return signOut(auth)
-    }
-    // observer
-useEffect(()=>{
-   const unsubscribe= onAuthStateChanged(auth, (user) => {
-        if (user) {
-            setLoading(false)
-   setUser(user)
-        }
-      });
+  const allValues = {
+    createUser,
+    signInUser,
+    googleLogin,
+    githubLogin,
+    logOut,
+    user,
+    loading,
+  };
 
-      return unsubscribe()
-},[])
+  if (loading) {
+    return <h1 className="text-4xl text-red-500">Loading......</h1>;
+  }
 
-
-    const allValues={
-createUser,
-signInUser,
-googleLogin,
-githubLogin,
-logOut,
-user,
-loading
-    }
-    return (
-        <AuthContex.Provider value={allValues}>
-            {children}
-        </AuthContex.Provider>
-    );
+  return (
+    <AuthContex.Provider value={allValues}>
+      {children}
+    </AuthContex.Provider>
+  );
 };
 
-export default FirebaseProvider;
+export default FirebaseProvider

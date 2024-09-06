@@ -3,12 +3,19 @@ import App from "../App";
 
 import SignIn from "../Login/SignIn"
 import SignUp from "../Login/SignUp"
+import ProductsCard from "../components/ProductsCard";
 
 
 export const router = createBrowserRouter([
     {
       path: "/",
-      element: <App></App>
+      element: <App></App>,
+      children:[
+        {
+          path:'/productCard',
+          element:<ProductsCard></ProductsCard>
+        }
+      ]
     },
     {
         path: "/signIn",

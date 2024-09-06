@@ -14,12 +14,12 @@ const Navbar = () => {
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
-    setMenuOpen(false);
+    setMenuOpen(false); // Close menu if dropdown is toggled
   };
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
-    setDropdownOpen(false);
+    setDropdownOpen(false); // Close dropdown if menu is toggled
   };
 
   const closeMenu = () => {
@@ -32,7 +32,8 @@ const Navbar = () => {
       <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src={logo} className="h-8" alt="Logo" />
+            {/* Fallback logo if user.photoURL is not available */}
+            <img src={ logo} className="h-8" alt="Logo" />
           </Link>
 
           <div className="flex items-center md:order-2 space-x-3 rtl:space-x-reverse">
@@ -49,7 +50,8 @@ const Navbar = () => {
                   aria-controls="user-dropdown"
                 >
                   <span className="sr-only">Open user menu</span>
-                  <img className="w-8 h-8 rounded-full" src={avatar} alt="User" />
+                  {/* Fallback avatar if user.photoURL is not available */}
+                  <img className="w-8 h-8 rounded-full" src={user.photoURL?user.photoURL:avatar} alt="User" />
                 </button>
               </>
             ) : (
@@ -61,7 +63,7 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Dropdown */}
+            {/* Dropdown Menu */}
             {isDropdownOpen && user && (
               <div
                 className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600 absolute right-4 top-12"
@@ -80,7 +82,7 @@ const Navbar = () => {
                     <button
                       onClick={() => {
                         logOut();
-                        closeMenu();
+                        closeMenu(); // Close both menu and dropdown after logging out
                       }}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
@@ -91,7 +93,7 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Mobile menu button */}
+            {/* Mobile Menu Button */}
             <button
               data-collapse-toggle="navbar-user"
               type="button"
@@ -119,7 +121,7 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Navbar links */}
+          {/* Navbar Links */}
           <div
             className={`${
               isMenuOpen ? "block" : "hidden"
