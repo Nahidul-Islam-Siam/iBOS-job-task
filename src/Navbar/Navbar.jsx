@@ -9,7 +9,7 @@ const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const { user, logOut } = useAuth(); 
+  const { user, logOut } = useAuth();
   console.log(user);
 
   const toggleDropdown = () => {
@@ -33,15 +33,17 @@ const Navbar = () => {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
             {/* Fallback logo if user.photoURL is not available */}
-            <img src={ logo} className="h-8" alt="Logo" />
+            <img src={logo} className="h-8" alt="Logo" />
           </Link>
 
           <div className="flex items-center md:order-2 space-x-3 rtl:space-x-reverse">
             {user ? (
               <>
-                <button>
-                  <IoBagOutline size={24} />
-                </button>
+                <Link to="/cart">
+                  <button>
+                    <IoBagOutline size={24} />
+                  </button>
+                </Link>
                 <button
                   type="button"
                   className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -51,7 +53,7 @@ const Navbar = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   {/* Fallback avatar if user.photoURL is not available */}
-                  <img className="w-8 h-8 rounded-full" src={user.photoURL?user.photoURL:avatar} alt="User" />
+                  <img className="w-8 h-8 rounded-full" src={user.photoURL ? user.photoURL : avatar} alt="User" />
                 </button>
               </>
             ) : (
@@ -131,7 +133,6 @@ const Navbar = () => {
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <Link
-                  to="/home"
                   onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
@@ -158,11 +159,11 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/custom"
+                  to="/cart"
                   onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
-                  Custom
+                  Cart
                 </Link>
               </li>
               <li>

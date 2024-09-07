@@ -38,8 +38,16 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, [userEmail]);
 
+  const updateCartItemQuantity = (productId, quantity) => {
+    setCart(cart.map(item => item._id === productId ? { ...item, quantity } : item));
+  };
+
+  const removeCartItem = (productId) => {
+    setCart(cart.filter(item => item._id !== productId));
+  };
+
   return (
-    <CartContext.Provider value={{ cart, setCart, loading }}>
+    <CartContext.Provider value={{ cart, setCart, updateCartItemQuantity, removeCartItem, loading }}>
       {children}
     </CartContext.Provider>
   );
