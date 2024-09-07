@@ -17,7 +17,7 @@ const ProductsCard = ({ product }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/cart", {
+      const response = await fetch("https://job-task-server-ruddy-tau.vercel.app/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
