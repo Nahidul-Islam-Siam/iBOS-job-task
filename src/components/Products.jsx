@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import ProductsCard from "./ProductsCard";
 
 const Products = () => {
@@ -7,14 +7,13 @@ const Products = () => {
     priceRange: [0, 500],
     discount: 0,
     searchText: "",
+    sortOption: "none" // Added sort option
   });
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(9);
-  const numberOfPages = Math.ceil(products.length / itemsPerPage);
-  const pages = [...Array(numberOfPages).keys()];
+  const [itemsPerPage] = useState(9);
 
   // Fetch products from API and extract unique categories
   useEffect(() => {
@@ -36,7 +35,7 @@ const Products = () => {
   }, []);
 
   // Handle filter and sorting logic
-  const filterProducts = () => {
+  const filterProducts = useMemo(() => {
     let filteredProducts = products;
 
     // Apply category filter
@@ -56,15 +55,28 @@ const Products = () => {
       );
     }
 
+    // Apply sorting
+    if (selectedFilters.sortOption === "low-to-high") {
+      filteredProducts.sort((a, b) => a.price - b.price);
+    } else if (selectedFilters.sortOption === "high-to-low") {
+      filteredProducts.sort((a, b) => b.price - a.price);
+    }
+
     return filteredProducts;
-  };
+  }, [products, selectedFilters]);
+
+  const numberOfPages = Math.ceil(filterProducts().length / itemsPerPage);
+  const pages = [...Array(numberOfPages).keys()];
+
+  const paginatedProducts = useMemo(() => 
+    filterProducts().slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), 
+    [filterProducts, currentPage, itemsPerPage]
+  );
 
   const handleFilterChange = (type, value) => {
     setSelectedFilters(prevFilters => ({ ...prevFilters, [type]: value }));
     setCurrentPage(0); // Reset pagination on filter change
   };
-
-  const paginatedProducts = filterProducts().slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   return (
     <div className="bg-slate-200">
@@ -84,7 +96,6 @@ const Products = () => {
           </div>
         </div>
 
-        {/* Layout with filters on the left */}
         <div className="flex">
           {/* Left Sidebar Filters */}
           <div className="w-1/4 bg-white p-5 rounded-lg shadow-md">
@@ -118,14 +129,16 @@ const Products = () => {
               <input
                 type="number"
                 placeholder="Min Price"
+                value={selectedFilters.priceRange[0]}
+                onChange={(e) => handleFilterChange("priceRange", [Number(e.target.value), selectedFilters.priceRange[1]])}
                 className="px-4 py-2 w-full mb-2 border border-gray-300 rounded-md"
-                onChange={(e) => handleFilterChange("priceRange", [e.target.value, selectedFilters.priceRange[1]])}
               />
               <input
                 type="number"
                 placeholder="Max Price"
+                value={selectedFilters.priceRange[1]}
+                onChange={(e) => handleFilterChange("priceRange", [selectedFilters.priceRange[0], Number(e.target.value)])}
                 className="px-4 py-2 w-full border border-gray-300 rounded-md"
-                onChange={(e) => handleFilterChange("priceRange", [selectedFilters.priceRange[0], e.target.value])}
               />
             </div>
           </div>
