@@ -20,7 +20,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://job-task-server-ruddy-tau.vercel.app/products");
+        const response = await fetch("https://jobtaskserver.vercel.app/products");
         const data = await response.json();
         setProducts(data);
 
