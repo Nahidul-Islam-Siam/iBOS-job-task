@@ -1,20 +1,18 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-
-import './index.css'
-import {
-  RouterProvider,
-} from "react-router-dom";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 import { router } from './Main/Main.jsx';
+
 import FirebaseProvider from './FirebaseProvider.jsx/FirebaseProvider.jsx';
-
-
+import { CartProvider } from './components/CartContext.jsx';
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-<FirebaseProvider>
-<RouterProvider router={router} />
-</FirebaseProvider>
-  </StrictMode>,
-)
+    <FirebaseProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </FirebaseProvider>
+  </StrictMode>
+);
