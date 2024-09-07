@@ -13,7 +13,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage] = useState(9);
+  const itemsPerPage = 9;
 
   // Fetch products from API and extract unique categories
   useEffect(() => {
@@ -35,7 +35,7 @@ const Products = () => {
   }, []);
 
   // Handle filter and sorting logic
-  const filterProducts = useMemo(() => {
+  const filterProducts = () => {
     let filteredProducts = products;
 
     // Apply category filter
@@ -63,14 +63,17 @@ const Products = () => {
     }
 
     return filteredProducts;
-  }, [products, selectedFilters]);
+  };
 
-  const numberOfPages = Math.ceil(filterProducts().length / itemsPerPage);
+  // Memoize filtered products
+  const filteredProducts = useMemo(() => filterProducts(), [products, selectedFilters]);
+
+  // Pagination logic
+  const numberOfPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const pages = [...Array(numberOfPages).keys()];
-
   const paginatedProducts = useMemo(() => 
-    filterProducts().slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), 
-    [filterProducts, currentPage, itemsPerPage]
+    filteredProducts.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage),
+    [filteredProducts, currentPage, itemsPerPage]
   );
 
   const handleFilterChange = (type, value) => {
