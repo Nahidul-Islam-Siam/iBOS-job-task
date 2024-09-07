@@ -4,6 +4,7 @@ import App from "../App";
 import SignIn from "../Login/SignIn"
 import SignUp from "../Login/SignUp"
 import ProductsCard from "../components/ProductsCard";
+import Products from "../components/Products";
 
 
 export const router = createBrowserRouter([
@@ -14,6 +15,11 @@ export const router = createBrowserRouter([
         {
           path:'/productCard',
           element:<ProductsCard></ProductsCard>
+        }
+        ,
+        {
+          path:'/products',
+          element:<Products/>
         }
       ]
     },
