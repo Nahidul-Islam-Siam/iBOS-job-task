@@ -1,16 +1,21 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import avatar from "../assets/avatar.png";
 import logo from "../assets/logo.png";
 import { Link } from 'react-router-dom';
 import { IoBagOutline } from "react-icons/io5";
 import useAuth from '../Hooks/useAuth';
+import { CartContext } from '../components/CartContext';
+
 
 const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const { user, logOut } = useAuth();
-  console.log(user);
+  const { cart } = useContext(CartContext); // Access cart from CartContext
+
+  // Calculate total items in the cart
+  const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -32,7 +37,6 @@ const Navbar = () => {
       <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-md">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-            {/* Fallback logo if user.photoURL is not available */}
             <img src={logo} className="h-8" alt="Logo" />
           </Link>
 
@@ -40,8 +44,13 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link to="/cart">
-                  <button>
+                  <button className="relative">
                     <IoBagOutline size={24} />
+                    {cartItemCount > 0 && (
+                      <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                        {cartItemCount}
+                      </span>
+                    )}
                   </button>
                 </Link>
                 <button
@@ -52,7 +61,6 @@ const Navbar = () => {
                   aria-controls="user-dropdown"
                 >
                   <span className="sr-only">Open user menu</span>
-                  {/* Fallback avatar if user.photoURL is not available */}
                   <img className="w-8 h-8 rounded-full" src={user.photoURL ? user.photoURL : avatar} alt="User" />
                 </button>
               </>
@@ -65,26 +73,18 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Dropdown Menu */}
             {isDropdownOpen && user && (
-              <div
-                className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600 absolute right-4 top-12"
-                id="user-dropdown"
-              >
+              <div className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600 absolute right-4 top-12" id="user-dropdown">
                 <div className="px-4 py-3">
-                  <span className="block text-sm text-gray-900 dark:text-white">
-                    {user.displayName}
-                  </span>
-                  <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                    {user.email}
-                  </span>
+                  <span className="block text-sm text-gray-900 dark:text-white">{user.displayName}</span>
+                  <span className="block text-sm text-gray-500 truncate dark:text-gray-400">{user.email}</span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
                     <button
                       onClick={() => {
                         logOut();
-                        closeMenu(); // Close both menu and dropdown after logging out
+                        closeMenu();
                       }}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
@@ -95,7 +95,6 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Mobile Menu Button */}
             <button
               data-collapse-toggle="navbar-user"
               type="button"
@@ -105,31 +104,13 @@ const Navbar = () => {
               aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 17 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 1h15M1 7h15M1 13h15"
-                />
+              <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
               </svg>
             </button>
           </div>
 
-          {/* Navbar Links */}
-          <div
-            className={`${
-              isMenuOpen ? "block" : "hidden"
-            } items-center justify-between w-full md:flex md:w-auto md:order-1`}
-            id="navbar-user"
-          >
+          <div className={`${isMenuOpen ? "block" : "hidden"} items-center justify-between w-full md:flex md:w-auto md:order-1`} id="navbar-user">
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <Link
@@ -141,7 +122,6 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/products"
                   onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
@@ -150,7 +130,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/categories"
+                  // to="/categories"
                   onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
@@ -163,12 +143,12 @@ const Navbar = () => {
                   onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
-                  Cart
+                  Cart <span className='text-sm text-red-200'>{cartItemCount}</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/blog"
+                  // to="/blog"
                   onClick={closeMenu}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
