@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-vars */
 import useAuth from "../Hooks/useAuth";
 
-
 const ProductsCard = ({ product }) => {
   const { name, category, price, oldPrice, discount, image, description, _id } = product;
   const { user } = useAuth(); // Assuming you're using a hook to get user data
@@ -17,32 +16,44 @@ const ProductsCard = ({ product }) => {
     }
 
     try {
-      const response = await fetch("https://server2-tau-ashen.vercel.app/cart", {
+      const payload = {
+        email,
+        product: {
+          _id, // Use the MongoDB _id for identification
+          name,
+          category,
+          price,
+          oldPrice,
+          discount,
+          image,
+          description,
+        },
+      };
+      
+      console.log("Sending payload to server:", payload);
+
+      const response = await fetch("https://server3-pied.vercel.app/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          product: {
-            _id, // Use the MongoDB _id for identification
-            name,
-            category,
-            price,
-            oldPrice,
-            discount,
-            image,
-            description,
-          },
-        }),
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error("Failed to add product");
+      console.log("Server response status:", response.status);
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(`Failed to add product: ${errorResponse.message || response.statusText}`);
+      }
+
       const data = await response.json();
+      console.log("Server response data:", data);
+
       alert("Product added to cart successfully!");
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to add product to cart.");
+      alert("Failed to add product to cart. " + error.message);
     }
   };
 

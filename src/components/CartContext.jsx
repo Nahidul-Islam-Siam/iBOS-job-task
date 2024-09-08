@@ -18,7 +18,7 @@ export const CartProvider = ({ children }) => {
       console.log(`Fetching cart for email: ${userEmail}`);
 
       try {
-        const response = await fetch(`https://server2-tau-ashen.vercel.app/cart/${encodeURIComponent(userEmail)}`);
+        const response = await fetch(`https://server3-pied.vercel.app/cart/${encodeURIComponent(userEmail)}`);
         
         if (!response.ok) {
           console.error('Failed to fetch cart data', response.status);
