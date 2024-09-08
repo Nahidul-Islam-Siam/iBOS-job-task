@@ -18,7 +18,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://server2-tau-ashen.vercel.app/products");
+        const response = await fetch("https://server3-pied.vercel.app/products");
         const data = await response.json();
         setProducts(data);
 
